@@ -22,52 +22,79 @@
     <p class="hero">上传一份主题表，挑好画风，一键生成属于你的 AI 漫画 ✦ 配置与图片都只留在你本机。</p>
 
     <!-- 漫画创作 -->
-    <section id="tab-create" class="panel">
-      <div class="row">
-        <label class="filelabel">主题表（Excel，第一列每行一个主题）
-          <input type="file" id="xlsx" accept=".xlsx,.xls" />
-        </label>
-        <span id="themeCount" class="hint"></span>
-      </div>
-
-      <div class="row">
-        <label>产出形态
-          <select id="formType">
-            <option value="strip">多格拼长条</option>
-            <option value="one_image">一题一图</option>
-            <option value="multi_image">多张独立图</option>
-          </select>
-        </label>
-        <label id="panelCountWrap">格数（2-20）
-          <input type="number" id="panels" min="2" max="20" value="4" />
-        </label>
-        <label>图片比例
-          <select id="ratio">
-            <option value="1:1">1:1</option>
-            <option value="3:4">3:4</option>
-            <option value="9:16" selected>9:16</option>
-            <option value="4:3">4:3</option>
-          </select>
-        </label>
-        <label>画风方案
-          <select id="preset"></select>
-        </label>
-      </div>
-
-      <div class="row">
-        <button id="startBtn" class="primary">开始生成</button>
-        <button id="stopBtn" disabled>停止</button>
-      </div>
-
-      <div id="tasks" class="tasks"></div>
-
-      <div id="preview" class="preview" hidden>
-        <h3>成品预览</h3>
-        <div class="canvas-wrap"><canvas id="canvas"></canvas></div>
+    <section id="tab-create" class="panel workspace">
+      <!-- 左：控制栏 -->
+      <div class="rail">
         <div class="row">
-          <button id="downloadBtn" class="primary">下载长图</button>
-          <label>转存赛道 <input type="text" id="track" placeholder="如：情感 / 搞笑" /></label>
-          <button id="saveTrackBtn">保存</button>
+          <label class="filelabel">主题表（Excel，第一列每行一个主题）
+            <input type="file" id="xlsx" accept=".xlsx,.xls" />
+          </label>
+          <span id="themeCount" class="hint"></span>
+        </div>
+
+        <div class="row">
+          <label>产出形态
+            <select id="formType">
+              <option value="strip">多格拼长条</option>
+              <option value="one_image">一题一图</option>
+              <option value="multi_image">多张独立图</option>
+            </select>
+          </label>
+          <label id="panelCountWrap">格数（2-20）
+            <input type="number" id="panels" min="2" max="20" value="4" />
+          </label>
+          <label>图片比例
+            <select id="ratio">
+              <option value="1:1">1:1</option>
+              <option value="3:4">3:4</option>
+              <option value="9:16" selected>9:16</option>
+              <option value="4:3">4:3</option>
+            </select>
+          </label>
+          <label>画风方案
+            <select id="preset"></select>
+          </label>
+        </div>
+
+        <div class="row">
+          <button id="startBtn" class="primary">开始生成</button>
+          <button id="stopBtn" disabled>停止</button>
+        </div>
+
+        <div id="tasks" class="tasks"></div>
+      </div>
+
+      <!-- 右：漫画工作室灯箱 -->
+      <div class="studio">
+        <div class="studio-bar">
+          <span class="traffic"><i></i><i></i><i></i></span>
+          <span class="studio-title">漫画工作室 · Studio</span>
+          <span class="studio-tag">CANVAS</span>
+        </div>
+        <div class="studio-body">
+          <div class="tool-dock" aria-hidden="true">
+            <button class="tool" type="button" title="分镜格">▦</button>
+            <button class="tool" type="button" title="对白气泡">💬</button>
+            <button class="tool" type="button" title="画笔">🖌️</button>
+            <button class="tool" type="button" title="画格">◫</button>
+            <button class="tool" type="button" title="导出">⤓</button>
+          </div>
+          <div class="stage">
+            <div id="preview" class="preview" hidden>
+              <h3>成品预览</h3>
+              <div class="canvas-wrap"><canvas id="canvas"></canvas></div>
+              <div class="row">
+                <button id="downloadBtn" class="primary">下载长图</button>
+                <label>转存赛道 <input type="text" id="track" placeholder="如：情感 / 搞笑" /></label>
+                <button id="saveTrackBtn">保存</button>
+              </div>
+            </div>
+            <div id="stageEmpty" class="stage-empty">
+              <div class="stage-illu">🎞️</div>
+              <p class="stage-title">画布待命</p>
+              <span class="stage-tip">导入主题表并点击「开始生成」，成品会在这盏灯箱里呈现</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>

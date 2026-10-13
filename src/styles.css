@@ -297,16 +297,98 @@ button:disabled {
 .task.err { border-left-color: var(--err); background: var(--err-soft); }
 .task.err .status { color: var(--err); }
 
-/* ============ 预览：漫画分镜框 ============ */
-/* ============ 预览：漫画工作室（暗色灯箱，成品像在 Clip Studio 里） ============ */
-.preview {
-  margin-top: var(--sp-4);
+/* ============ 漫画创作：工作室布局（类 Clip Studio / MediBang） ============ */
+.workspace {
+  display: flex;
+  gap: var(--sp-4);
+  align-items: stretch;
+}
+.workspace .rail {
+  flex: 0 0 380px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.workspace .rail .row { margin-bottom: 0; }
+
+/* 暗色漫画工作室灯箱 */
+.studio {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
   background: #15131D;
   border: 1.5px solid #2C2937;
   border-radius: var(--r-lg);
+  overflow: hidden;
+}
+.studio-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  background: #1C1A25;
+  border-bottom: 1px solid #2C2937;
+}
+.studio-bar .traffic { display: inline-flex; gap: 7px; }
+.studio-bar .traffic i {
+  width: 11px; height: 11px; border-radius: 50%;
+  background: #3A3650; display: block;
+}
+.studio-bar .traffic i:first-child { background: var(--accent); }
+.studio-bar .studio-title {
+  font-size: 13.5px; font-weight: 800; color: #EDE9FF; letter-spacing: .3px;
+}
+.studio-bar .studio-tag {
+  margin-left: auto;
+  font-size: 11px; font-weight: 700; color: #8E86A8;
+  border: 1px solid #34313F; border-radius: var(--r-pill); padding: 3px 10px;
+}
+.studio-body { display: flex; flex: 1; min-height: 440px; }
+
+/* 左工具坞（装饰性，建立漫画程序识别度） */
+.tool-dock {
+  flex: 0 0 56px;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 16px 0;
+  background: #121019;
+  border-right: 1px solid #2C2937;
+}
+.tool-dock .tool {
+  width: 38px; height: 38px; padding: 0;
+  display: grid; place-items: center;
+  font-size: 16px; line-height: 1;
+  background: #1C1A25; color: #B9B2CC;
+  border: 1px solid #34313F; border-radius: 10px;
+  cursor: default;
+}
+
+/* 画布舞台 */
+.studio-body .stage {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column;
+}
+.stage-empty {
+  flex: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; text-align: center; padding: 24px;
+  color: #8E86A8;
+}
+.stage-empty .stage-illu { font-size: 46px; opacity: .7; }
+.stage-empty .stage-title { margin: 4px 0 0; font-size: 16px; font-weight: 800; color: #B9B2CC; }
+.stage-empty .stage-tip { font-size: 13px; max-width: 260px; line-height: 1.6; }
+
+/* 预览（位于工作室灯箱内，背景透明） */
+.preview {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   padding: var(--sp-4);
+  margin: 0;
 }
 .preview h3 {
+  align-self: flex-start;
   display: inline-block;
   margin: 0 0 var(--sp-3);
   padding: 6px 16px;
@@ -317,9 +399,11 @@ button:disabled {
   border-radius: var(--r-pill);
 }
 .preview label { color: #B9B2CC; }
+.preview .row { margin-top: auto; }
 .canvas-wrap {
   overflow: auto;
-  max-height: 70vh;
+  flex: 1;
+  min-height: 240px;
   border: 1px solid #34313F;
   border-radius: var(--r);
   background:
@@ -335,6 +419,15 @@ canvas {
   margin: 0 auto;
   background: #fff;
   box-shadow: 0 10px 34px rgba(0,0,0,0.55);
+}
+/* 预览出现时隐藏占位 */
+.studio:has(#preview:not([hidden])) .stage-empty { display: none; }
+
+/* 窄屏：工作室改上下排布 */
+@media (max-width: 880px) {
+  .workspace { flex-direction: column; }
+  .workspace .rail { flex-basis: auto; }
+  .studio-body { min-height: 380px; }
 }
 
 /* ============ 画风方案编辑 ============ */
