@@ -28,7 +28,7 @@
    - macOS：`xcode-select --install`
 2. 克隆仓库
    ```bash
-   git clone https://github.com/<你的用户名>/ai-comic-studio.git
+   git clone https://github.com/lw76p/ai-comic-studio.git
    cd ai-comic-studio
    ```
 3. 安装依赖
