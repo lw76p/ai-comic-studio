@@ -1,6 +1,6 @@
 {
   "name": "ai-comic-studio",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "免费开源的 AI 漫画创作桌面应用。Tauri + 原生前端，用户自部署、API 自选。",
   "license": "MIT",
   "author": "AI Comic Studio contributors",
