@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Comic Studio</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">🎨 AI Comic Studio</div>
+    <nav class="tabs">
+      <button class="tab active" data-tab="create">漫画创作</button>
+      <button class="tab" data-tab="config">配置</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- 漫画创作 -->
+    <section id="tab-create" class="panel">
+      <div class="row">
+        <label class="filelabel">主题表（Excel，第一列每行一个主题）
+          <input type="file" id="xlsx" accept=".xlsx,.xls" />
+        </label>
+        <span id="themeCount" class="hint"></span>
+      </div>
+
+      <div class="row">
+        <label>产出形态
+          <select id="formType">
+            <option value="strip">多格拼长条</option>
+            <option value="one_image">一题一图</option>
+            <option value="multi_image">多张独立图</option>
+          </select>
+        </label>
+        <label id="panelCountWrap">格数（2-20）
+          <input type="number" id="panels" min="2" max="20" value="4" />
+        </label>
+        <label>图片比例
+          <select id="ratio">
+            <option value="1:1">1:1</option>
+            <option value="3:4">3:4</option>
+            <option value="9:16" selected>9:16</option>
+            <option value="4:3">4:3</option>
+          </select>
+        </label>
+        <label>画风方案
+          <select id="preset"></select>
+        </label>
+      </div>
+
+      <div class="row">
+        <button id="startBtn" class="primary">开始生成</button>
+        <button id="stopBtn" disabled>停止</button>
+      </div>
+
+      <div id="tasks" class="tasks"></div>
+
+      <div id="preview" class="preview" hidden>
+        <h3>成品预览</h3>
+        <div class="canvas-wrap"><canvas id="canvas"></canvas></div>
+        <div class="row">
+          <button id="downloadBtn" class="primary">下载长图</button>
+          <label>转存赛道 <input type="text" id="track" placeholder="如：情感 / 搞笑" /></label>
+          <button id="saveTrackBtn">保存</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 配置 -->
+    <section id="tab-config" class="panel" hidden>
+      <h3>LLM（分镜扩写）</h3>
+      <label>Base URL<input type="text" id="cfgLlmBase" placeholder="https://api.deepseek.com/v1" /></label>
+      <label>API Key<input type="password" id="cfgLlmKey" placeholder="sk-..." /></label>
+      <label>模型名<input type="text" id="cfgLlmModel" placeholder="deepseek-chat" /></label>
+
+      <h3>生图</h3>
+      <label>Base URL<input type="text" id="cfgImgBase" placeholder="https://api.siliconflow.cn/v1" /></label>
+      <label>API Key<input type="password" id="cfgImgKey" placeholder="sk-..." /></label>
+      <label>模型名<input type="text" id="cfgImgModel" placeholder="black-forest-labs/FLUX.1-schnell" /></label>
+      <label>接口路径<input type="text" id="cfgImgEndpoint" placeholder="/v1/images/generations" /></label>
+
+      <h3>画风方案</h3>
+      <div id="presetList"></div>
+      <div class="preset-edit">
+        <input type="text" id="pName" placeholder="方案名" />
+        <textarea id="pStyle" placeholder="画风提示词"></textarea>
+        <textarea id="pStory" placeholder="分镜提示词"></textarea>
+        <textarea id="pBubble" placeholder="对白气泡提示词"></textarea>
+        <button id="addPreset" class="primary">新增 / 更新方案</button>
+      </div>
+
+      <button id="saveCfg" class="primary">保存配置</button>
+      <p class="warn">配置仅保存在你本机（localStorage），不会上传。</p>
+    </section>
+  </main>
+
+  <script src="presets.js"></script>
+  <script src="api.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

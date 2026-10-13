@@ -1,0 +1,17 @@
+[package]
+name = "ai-comic-studio"
+version = "0.1.0"
+description = "免费开源的 AI 漫画创作桌面应用"
+authors = ["AI Comic Studio contributors"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+
+[profile.release]
+panic = "abort"
+strip = true
+opt-level = "s"
