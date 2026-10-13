@@ -100,7 +100,7 @@ git push origin v0.1.0
 
 - Tauri v2（桌面壳）
 - 原生 HTML / CSS / JS（零前端构建）
-- SheetJS（Excel 解析，CDN 引入）
+- SheetJS（Excel 解析，已本地打包于 `src/vendor/`，离线可用、无外网依赖）
 - Canvas（拼图）
 - 你配置的任意 OpenAI 兼容 LLM / 生图 API
 
