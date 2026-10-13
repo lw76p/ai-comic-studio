@@ -1,77 +1,365 @@
+/* ============================================================
+   AI Comic Studio · 动漫/漫画风主题
+   设计约束（design-aesthetics-book 品牌轨可迁移原则）：
+   - 无衬线字体；墨黑文字（非纯黑）
+   - 统一令牌变量；层级靠间距/字重建，不靠装饰堆砌
+   - 扁平：零渐变填充、零投影（仅漫画网点纹理作 signature）
+   ============================================================ */
+
 :root {
-  --bg: #f6f7fb;
-  --panel: #ffffff;
-  --ink: #1f2330;
-  --muted: #6b7280;
-  --line: #e5e7eb;
-  --brand: #6c5ce8;
-  --brand-ink: #ffffff;
-  --ok: #16a34a;
-  --warn: #d97706;
-  --err: #dc2626;
+  /* 底色：柔雾紫，动漫软件的轻盈感 */
+  --bg: #F3F0FB;
+  --bg-soft: #FBF9FF;
+  --panel: #FFFFFF;
+
+  /* 文字：墨黑，禁纯黑 */
+  --ink: #1F2227;
+  --muted: #6B6478;
+
+  /* 线：淡紫描边 */
+  --line: #E7E1F5;
+  --line-strong: #D8CFF2;
+
+  /* 主色：动漫紫罗兰 */
+  --brand: #7C5CFC;
+  --brand-deep: #5B3FD6;
+  --brand-soft: #EFE9FF;
+
+  /* 辅助：珊瑚粉，仅小面积点睛（≤8%） */
+  --accent: #FF7EB6;
+  --accent-soft: #FFE9F3;
+
+  /* 状态色（动漫友好、不过刺） */
+  --ok: #1FB87A;
+  --ok-soft: #E3F8EF;
+  --warn: #E0892B;
+  --warn-soft: #FCEFD9;
+  --err: #E5484D;
+  --err-soft: #FCE6E7;
+
+  /* 圆角阶梯 */
+  --r-sm: 10px;
+  --r: 16px;
+  --r-lg: 22px;
+  --r-pill: 999px;
+
+  /* 间距栅格 */
+  --sp-1: 8px;
+  --sp-2: 14px;
+  --sp-3: 20px;
+  --sp-4: 28px;
+  --sp-5: 40px;
 }
+
 * { box-sizing: border-box; }
+
+/* 漫画网点纹理：极淡的 halftone，作 signature 而非装饰 */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(124, 92, 252, 0.10) 1.4px, transparent 1.5px);
+  background-size: 22px 22px;
+  opacity: 0.5;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", Segoe UI, sans-serif;
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", -apple-system, "Segoe UI", system-ui, sans-serif;
   background: var(--bg);
   color: var(--ink);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* ============ 顶栏 ============ */
 .topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 20px;
+  gap: var(--sp-3);
+  padding: 14px 26px;
   background: var(--panel);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 2px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
-.brand { font-weight: 700; font-size: 18px; }
-.tabs { display: flex; gap: 8px; }
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 800;
+  font-size: 19px;
+  letter-spacing: 0.2px;
+}
+.brand .logo {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: var(--brand);
+  color: #fff;
+  font-size: 20px;
+  transform: rotate(-4deg);
+}
+.brand .name { color: var(--ink); }
+.brand .name b { color: var(--brand-deep); }
+
+/* 标签切换：贴纸胶囊 */
+.tabs { display: flex; gap: 10px; }
 .tab {
-  border: 1px solid var(--line);
-  background: var(--panel);
-  color: var(--ink);
-  padding: 7px 16px;
-  border-radius: 8px;
+  border: 1.5px solid var(--line-strong);
+  background: var(--bg-soft);
+  color: var(--muted);
+  padding: 9px 18px;
+  border-radius: var(--r-pill);
   cursor: pointer;
   font-size: 14px;
+  font-weight: 600;
+  transition: transform .12s ease, background .15s ease, color .15s ease;
 }
-.tab.active { background: var(--brand); color: var(--brand-ink); border-color: var(--brand); }
+.tab:hover { transform: translateY(-1px); color: var(--brand-deep); }
+.tab.active {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+  box-shadow: none;
+}
 
-main { padding: 20px; max-width: 1080px; margin: 0 auto; }
-.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
-.row { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; margin-bottom: 14px; }
-label { display: flex; flex-direction: column; gap: 5px; font-size: 13px; color: var(--muted); }
+/* ============ 主区 ============ */
+main {
+  padding: var(--sp-4) var(--sp-3) 64px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+/* 引导语：轻量 hero，强化动漫产品调性 */
+.hero {
+  margin: 0 0 var(--sp-4);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--brand-soft);
+  border: 1.5px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--r);
+  padding: 14px 18px;
+}
+
+/* 章节胶囊标题（漫画小标签风） */
+.panel h3 {
+  position: relative;
+  display: inline-block;
+  margin: 0 0 var(--sp-3);
+  padding: 6px 16px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--brand-deep);
+  background: var(--brand-soft);
+  border-radius: var(--r-pill);
+}
+
+/* 面板牌：白底 + 淡紫描边 + 大圆角 */
+.panel {
+  background: var(--panel);
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+  margin-bottom: var(--sp-4);
+}
+
+/* 表单行：间距建层级 */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  align-items: flex-end;
+  margin-bottom: var(--sp-3);
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
 label input, label select, label textarea {
-  font-size: 14px; color: var(--ink);
-  padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff;
+  font-size: 14px;
+  color: var(--ink);
+  font-family: inherit;
+  padding: 11px 13px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--bg-soft);
+  transition: border-color .15s ease, background .15s ease;
+}
+label input:hover, label select:hover, label textarea:hover { border-color: var(--line-strong); }
+label input:focus, label select:focus, label textarea:focus {
+  outline: none;
+  border-color: var(--brand);
+  background: #fff;
 }
 label input[type="text"], label input[type="password"], label select { min-width: 220px; }
-.filelabel input { margin-top: 4px; }
-button {
-  border: 1px solid var(--line); background: #fff; color: var(--ink);
-  padding: 9px 18px; border-radius: 8px; cursor: pointer; font-size: 14px;
-}
-button.primary { background: var(--brand); color: #fff; border-color: var(--brand); }
-button:disabled { opacity: .5; cursor: not-allowed; }
-.hint { font-size: 13px; color: var(--muted); }
-.warn { color: var(--warn); font-size: 12px; }
 
-.tasks { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
-.task {
-  border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px;
-  display: flex; justify-content: space-between; align-items: center; font-size: 14px;
+/* 文件选择：标签化 chip */
+.filelabel { gap: 9px; }
+.filelabel input[type="file"] {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brand-deep);
+  padding: 10px 14px;
+  border: 1.5px dashed var(--line-strong);
+  border-radius: var(--r-sm);
+  background: var(--brand-soft);
+  cursor: pointer;
 }
-.task .status { font-size: 12px; color: var(--muted); }
+.filelabel input[type="file"]::file-selector-button {
+  display: none;
+}
+
+/* ============ 按钮：贴纸风 ============ */
+button {
+  border: 1.5px solid var(--line-strong);
+  background: #fff;
+  color: var(--ink);
+  padding: 11px 22px;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  transition: transform .12s ease, background .15s ease, border-color .15s ease;
+}
+button:hover { transform: translateY(-1px); }
+button:active { transform: translateY(0); }
+button.primary {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+button.primary:hover { background: var(--brand-deep); }
+button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 提示：对白话气泡风 */
+.hint {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  background: var(--bg-soft);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 7px 14px;
+  position: relative;
+}
+.warn {
+  color: var(--warn);
+  font-size: 12.5px;
+  font-weight: 600;
+  background: var(--warn-soft);
+  border-radius: 10px;
+  padding: 6px 12px;
+  display: inline-block;
+}
+
+/* ============ 任务列表：漫画小卡 ============ */
+.tasks {
+  margin-top: var(--sp-3);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.task {
+  border: 1.5px solid var(--line);
+  border-left: 4px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  background: var(--bg-soft);
+  gap: 12px;
+}
+.task .status { font-size: 12.5px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+.task.done { border-left-color: var(--ok); background: var(--ok-soft); }
 .task.done .status { color: var(--ok); }
+.task.err { border-left-color: var(--err); background: var(--err-soft); }
 .task.err .status { color: var(--err); }
 
-.preview { margin-top: 18px; border-top: 1px dashed var(--line); padding-top: 14px; }
-.canvas-wrap { overflow: auto; max-height: 70vh; border: 1px solid var(--line); border-radius: 8px; background: #fafafa; }
-canvas { display: block; max-width: 100%; height: auto; }
+/* ============ 预览：漫画分镜框 ============ */
+.preview {
+  margin-top: var(--sp-4);
+  border-top: 2px dashed var(--line-strong);
+  padding-top: var(--sp-3);
+}
+.canvas-wrap {
+  overflow: auto;
+  max-height: 70vh;
+  border: 2px solid var(--ink);
+  border-radius: var(--r);
+  background:
+    repeating-linear-gradient(0deg, transparent 0 13px, rgba(31,34,39,0.035) 13px 14px),
+    var(--bg-soft);
+  padding: 10px;
+}
+canvas { display: block; max-width: 100%; height: auto; border-radius: 6px; }
 
-.preset-edit { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; max-width: 560px; }
-.preset-edit textarea { min-height: 60px; resize: vertical; font-family: inherit; }
-#presetList { display: flex; flex-direction: column; gap: 6px; max-width: 560px; }
-.preset-item { display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 14px; }
-.preset-item button { padding: 4px 10px; font-size: 12px; }
+/* ============ 画风方案编辑 ============ */
+.preset-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: var(--sp-2) 0 var(--sp-3);
+  max-width: 560px;
+}
+.preset-edit textarea {
+  min-height: 64px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+#presetList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 560px;
+}
+.preset-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--bg-soft);
+}
+.preset-item button {
+  padding: 6px 14px;
+  font-size: 12.5px;
+  border-radius: var(--r-pill);
+}
+
+/* 配置区分组间距 */
+#tab-config h3 { margin-top: var(--sp-3); }
+#tab-config h3:first-child { margin-top: 0; }
+#tab-config label { min-width: 220px; }
+
+/* 滚动条：淡紫 */
+* { scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: var(--r-pill); }
+*::-webkit-scrollbar-track { background: transparent; }
