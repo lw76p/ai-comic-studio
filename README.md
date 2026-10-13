@@ -35,10 +35,16 @@
    ```bash
    npm install
    ```
-4. 生成应用图标（首次需要；也可自备一张 PNG 替换 `app-icon.png`）
+4. 生成应用图标（首次需要）
+   - 先生成占位图（紫底 PNG，保存到仓库根 `app-icon.png`）：
+   ```bash
+   node tools/gen-icon.js
+   ```
+   - 再用 Tauri 生成各平台图标集（写入 `src-tauri/icons/`）：
    ```bash
    npx tauri icon app-icon.png
    ```
+   > 也可自备一张 512×512 的 PNG 直接命名 `app-icon.png` 替换，跳过第一步。
 5. 启动开发版
    ```bash
    npm run tauri dev
@@ -61,6 +67,17 @@ npm run tauri build
 ```
 
 产物在 `src-tauri/target/release/bundle/`（exe / dmg / AppImage），直接发给用户安装即可。
+
+## 自动构建与发布（GitHub Actions）
+
+仓库已内置 `.github/workflows/release.yml`：推送 `v*` 标签即自动为 Windows / macOS / Linux 构建安装包并发布到 GitHub Releases（草稿态）。
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+构建完成后到仓库 **Releases** 页面把草稿发布即可，把安装包链接发给用户。GitHub 免费账户即可使用，无需自建构建机。
 
 ## 技术栈
 

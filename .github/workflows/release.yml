@@ -1,0 +1,68 @@
+name: Release
+
+# 推送 v* 标签即自动为 Windows / macOS / Linux 构建安装包并发布到 GitHub Releases（草稿）。
+# 用法：
+#   git tag v0.1.0
+#   git push origin v0.1.0
+# 构建完成后到 Releases 页面把草稿发布即可。
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows-latest
+            args: ''
+          - platform: macos-latest
+            args: ''
+          - platform: ubuntu-22.04
+            args: ''
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Linux build deps
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: Install frontend deps
+        run: npm install
+
+      - name: Generate placeholder icon
+        run: node tools/gen-icon.js
+
+      - name: Generate Tauri icons
+        run: npx tauri icon app-icon.png
+
+      - name: Build and release
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: 'AI Comic Studio ${{ github.ref_name }}'
+          releaseBody: '免费开源 AI 漫画创作桌面应用。详见 README。'
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.args }}
