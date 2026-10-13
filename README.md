@@ -79,6 +79,23 @@ git push origin v0.1.0
 
 构建完成后到仓库 **Releases** 页面把草稿发布即可，把安装包链接发给用户。GitHub 免费账户即可使用，无需自建构建机。
 
+### 发版流程（每次发新版本）
+
+1. 改版本号：`package.json` 与 `src-tauri/tauri.conf.json` 里的 `version` 保持一致（如 `0.1.0` → `0.1.1`）。
+2. 提交并推送：
+   ```bash
+   git add -A && git commit -m "release: v0.1.1"
+   git push origin main
+   ```
+3. 打标签并推送（标签名必须以 `v` 开头，才匹配工作流的 `v*` 规则）：
+   ```bash
+   git tag v0.1.1
+   git push origin v0.1.1
+   ```
+4. 到仓库 **Actions** 等构建完成（约 5 分钟），再到 **Releases** 找到草稿，点 **Publish release** 对外发布。
+
+> 注意：标签必须在工作流文件已推送到 `main` 之后再打，否则不会触发构建。
+
 ## 技术栈
 
 - Tauri v2（桌面壳）
