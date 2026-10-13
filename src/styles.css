@@ -298,22 +298,44 @@ button:disabled {
 .task.err .status { color: var(--err); }
 
 /* ============ 预览：漫画分镜框 ============ */
+/* ============ 预览：漫画工作室（暗色灯箱，成品像在 Clip Studio 里） ============ */
 .preview {
   margin-top: var(--sp-4);
-  border-top: 2px dashed var(--line-strong);
-  padding-top: var(--sp-3);
+  background: #15131D;
+  border: 1.5px solid #2C2937;
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
 }
+.preview h3 {
+  display: inline-block;
+  margin: 0 0 var(--sp-3);
+  padding: 6px 16px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #EDE9FF;
+  background: #2C2937;
+  border-radius: var(--r-pill);
+}
+.preview label { color: #B9B2CC; }
 .canvas-wrap {
   overflow: auto;
   max-height: 70vh;
-  border: 2px solid var(--ink);
+  border: 1px solid #34313F;
   border-radius: var(--r);
   background:
-    repeating-linear-gradient(0deg, transparent 0 13px, rgba(31,34,39,0.035) 13px 14px),
-    var(--bg-soft);
-  padding: 10px;
+    repeating-linear-gradient(0deg, transparent 0 13px, rgba(255,255,255,0.03) 13px 14px),
+    #1C1A25;
+  padding: 14px;
 }
-canvas { display: block; max-width: 100%; height: auto; border-radius: 6px; }
+canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 0 auto;
+  background: #fff;
+  box-shadow: 0 10px 34px rgba(0,0,0,0.55);
+}
 
 /* ============ 画风方案编辑 ============ */
 .preset-edit {
@@ -357,6 +379,11 @@ canvas { display: block; max-width: 100%; height: auto; border-radius: 6px; }
 #tab-config h3 { margin-top: var(--sp-3); }
 #tab-config h3:first-child { margin-top: 0; }
 #tab-config label { min-width: 220px; }
+#tab-config input[type="text"],
+#tab-config input[type="password"] {
+  font-family: "SFMono-Regular", "JetBrains Mono", Consolas, "Courier New", monospace;
+  letter-spacing: 0.3px;
+}
 
 /* 滚动条：淡紫 */
 * { scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
